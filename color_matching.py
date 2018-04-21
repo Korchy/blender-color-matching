@@ -13,7 +13,7 @@ import os
 import json
 import copy
 from mathutils import Vector
-from .rgb import RGB
+from .b3d_lib_int.rgb import RGB
 
 
 class ColorMatching:
