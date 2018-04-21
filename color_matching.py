@@ -3,9 +3,6 @@
 #
 # GitHub
 #   https://github.com/Korchy/blender-color-matching
-#
-# Version history:
-#   1.0. - Search for some nearest alternative system color by RGB value
 
 
 import bpy
@@ -99,11 +96,26 @@ class ColorMatchingVars(bpy.types.PropertyGroup):
     )
 
 
+class DestColorItem(bpy.types.PropertyGroup):
+    dest_color = bpy.props.FloatVectorProperty(
+         name='Color',
+         subtype='COLOR',
+         size=4,
+         min=0.0,
+         max=1.0,
+         default=(0.8, 0.8, 0.8, 1.0)
+     )
+
+
 def register():
     bpy.utils.register_class(ColorMatchingVars)
+    bpy.utils.register_class(DestColorItem)
     bpy.types.WindowManager.colormatching_vars = bpy.props.PointerProperty(type=ColorMatchingVars)
+    bpy.types.WindowManager.colormatching_colors = bpy.props.CollectionProperty(type=DestColorItem)
 
 
 def unregister():
+    del bpy.types.WindowManager.colormatching_colors
     del bpy.types.WindowManager.colormatching_vars
+    bpy.utils.unregister_class(DestColorItem)
     bpy.utils.unregister_class(ColorMatchingVars)

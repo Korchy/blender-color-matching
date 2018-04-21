@@ -3,9 +3,7 @@
 #
 # GitHub
 #   https://github.com/Korchy/blender-color-matching
-#
-# Version history:
-#   1.0. - Search for some nearest alternative system colors by RGB value
+
 
 bl_info = {
     'name': 'Color matching',
