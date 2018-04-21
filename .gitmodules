@@ -1,0 +1,3 @@
+[submodule "b3d_lib_int"]
+	path = b3d_lib_int
+	url = git@github.com:Korchy/b3d_lib_int.git
