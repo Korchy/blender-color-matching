@@ -22,6 +22,14 @@ class ColorMatchPanel(bpy.types.Panel):
         self.layout.prop(context.window_manager.colormatching_vars, 'source_color')
         self.layout.operator('colormatch.ncsmatch', text='Search NCS (NCl)')
 
+        # self.layout.template_preview(bpy.data.materials['Test0'], show_buttons=False, preview_id='1')
+        # self.layout.template_preview(bpy.data.materials['Test1'], show_buttons=False, preview_id='2')
+
+        # self.layout.template_ID_preview(context.active_object, "active_material")
+
+        self.layout.template_ID_preview(context.active_object, "active_material")
+        self.layout.template_ID_preview(context.window_manager, 'colormatching_vars')
+
 
 def register():
     bpy.utils.register_class(ColorMatchPanel)

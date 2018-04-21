@@ -43,9 +43,11 @@ class NCSMatch(bpy.types.Operator):
         if matches and match_textures:
             row = self.layout.row()
             for i, texture in enumerate(match_textures):
+            # for i in range(2):
                 col = row.column()
-                col.template_preview(texture[1], show_buttons=False)
-                # col.template_preview(bpy.data.textures['colormatch_texture' + str(i)], show_buttons=False)
+                # col.template_preview(texture[1], show_buttons=False)
+                # col.template_preview(bpy.data.materials['Test'+str(i)], show_buttons=False)
+                col.template_preview(bpy.data.textures['colormatch_texture' + str(i)], show_buttons=False, preview_id=str(i))
                 col.label('RGB: ' + str(matches[i][0]))
                 col.label(matches[i][1][0])     # NCS
 
