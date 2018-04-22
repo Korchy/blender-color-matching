@@ -22,7 +22,7 @@ User Preferences - Add-ons - Install Add-on from File - select distributive arch
 
 <img src="https://b3d.interplanety.org/wp-content/upload_content/2018/04/01-400x212.png">
 
-- The “Add RGB Color” button under each founded color adds the RGB node to the active material node tree for all selected meshes.
+- The “Add RGB Color” button under each found color adds the RGB node to the active material node tree for all selected meshes.
 - The “Copy to Clipboard” button puts the search results to the clipboard.
 
 **Tested with Blender versions:**
