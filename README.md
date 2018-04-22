@@ -9,7 +9,7 @@ Author: Nikita Akimov interplanety@interplanety.org
 
 **Installation**
 
-User Preferences - Add-ons - Install Add-on from File - select downloaded archive
+User Preferences - Add-ons - Install Add-on from File - select distributive archive
 
 **Location**
 
