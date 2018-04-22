@@ -44,6 +44,17 @@ class ColorMatching:
         return __class__.__matches
 
     @staticmethod
+    def matches_str():
+        matches_str = ''
+        if __class__.__matches:
+            matches_str += '%\tRGB\tNCS\tHEX\tCMYK\n'
+            for line in __class__.__matches:
+                matches_str += '{:<7.2%}\t{:03d}-{:03d}-{:03d}\t{:<15}\t'.format(line[2], int(line[0][0]), int(line[0][1]), int(line[0][2]), line[1][0])
+                matches_str += '{}\t{}'.format(line[1][2], '-'.join([a.zfill(3) for a in line[1][1].split('-')]))
+                matches_str += '\n'
+        return matches_str
+
+    @staticmethod
     def match_textures():
         return __class__.__match_textures
 
@@ -51,19 +62,13 @@ class ColorMatching:
     def create_match_textures():
         if __class__.__matches:
             for i, item in enumerate(__class__.__matches):
-                img = bpy.data.images.new('colormatch_image' + str(i), 127.5, 127.5)
+                img = bpy.data.images.new('colormatch_image' + str(i), 255, 255)
                 img.generated_color[0] = item[0][0] / 255
                 img.generated_color[1] = item[0][1] / 255
                 img.generated_color[2] = item[0][2] / 255
-                # rgb = RGB.fromlist(item[0])
-                # # print(rgb.to_unit() + [1.0])
-                # img.generated_color = rgb.to_unit() + [1.0]
-                # print(img.generated_color[:])
-
                 texture = bpy.data.textures.new('colormatch_texture' + str(i), type='IMAGE')
                 texture.image = img
                 __class__.__match_textures.append([img, texture])
-                # __class__.__match_textures.append([img, 'colormatch_texture' + str(i)])
 
     @staticmethod
     def clear_match_textures():
@@ -71,8 +76,6 @@ class ColorMatching:
             for item in __class__.__match_textures:
                 bpy.data.images.remove(item[0], do_unlink=True)
                 bpy.data.textures.remove(item[1], do_unlink=True)
-                # bpy.data.images.remove(item[0])
-                # bpy.data.textures.remove(item[1])
         __class__.__match_textures = []
 
     @staticmethod
@@ -90,10 +93,10 @@ class ColorMatchingVars(bpy.types.PropertyGroup):
         max=1.0,
         default=(0.8, 0.8, 0.8, 1.0)
     )
-    matching_count = bpy.props.IntProperty(
-        name='MatchingCount',
-        default=5
-    )
+
+
+class ColorMatchingStatic:
+    matching_count = 5
 
 
 class DestColorItem(bpy.types.PropertyGroup):
