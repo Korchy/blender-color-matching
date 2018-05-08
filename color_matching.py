@@ -27,7 +27,7 @@ class ColorMatching:
         __class__.clear()
         rgb = RGB.fromlist(source_rgb)
         db = __class__.ncs_db()
-        rgb_vector = rgb.to_vector()
+        rgb_vector = rgb.as_vector()
         __class__.__matches = copy.deepcopy(sorted(db, key=lambda x: (rgb_vector - Vector((x[0][0], x[0][1], x[0][2]))).length)[:limit])
         for ncs in __class__.__matches:
             ncs.append(RGB.relevance(rgb, RGB.fromlist(ncs[0])))
