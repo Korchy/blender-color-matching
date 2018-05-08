@@ -17,7 +17,10 @@ class ColorMatchPanel(bpy.types.Panel):
 
     def draw(self, context):
         self.layout.prop(context.window_manager.colormatching_vars, 'source_color')
-        self.layout.operator('colormatch.ncsmatch', text='Search NCS (NCl)')
+        self.layout.operator('colormatch.colormatch', text='Search NCS (NCl)').db = 'NCS'
+        self.layout.operator('colormatch.colormatch', text='Search RAL Classic').db = 'RAL_C'
+        self.layout.operator('colormatch.colormatch', text='Search RAL Design').db = 'RAL_D'
+        self.layout.operator('colormatch.colormatch', text='Search RAL Effect').db = 'RAL_E'
 
 
 def register():

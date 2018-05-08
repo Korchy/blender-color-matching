@@ -9,11 +9,11 @@ bl_info = {
     'name': 'Color matching',
     'category': 'All',
     'author': 'Nikita Akimov',
-    'version': (1, 0, 0),
+    'version': (1, 1, 0),
     'blender': (2, 79, 0),
     'location': 'The 3D_View window - T-panel - the ColorMatching tab',
-    'wiki_url': '',
-    'tracker_url': '',
+    'wiki_url': 'https://b3d.interplanety.org/en/blender-add-on-color-matching/',
+    'tracker_url': 'https://b3d.interplanety.org/en/blender-add-on-color-matching/',
     'description': 'Search for some nearest alternative system colors by RGB value'
 }
 

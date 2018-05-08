@@ -7,6 +7,10 @@ Author: Nikita Akimov interplanety@interplanety.org
 
 <img src="https://b3d.interplanety.org/wp-content/upload_content/2018/04/00-400x200.png" title="Color Matching">
 
+**Current version**
+
+1.1
+
 **Installation**
 
 User Preferences - Add-ons - Install Add-on from File - select distributive archive
@@ -18,7 +22,7 @@ User Preferences - Add-ons - Install Add-on from File - select distributive arch
 **Usage**
 
 - Set the required color in the “Color” color picker field.
-- “Search NCS (NCl)” searches for the 5 closest colors in the Natural Color System (NCS) color fan.
+- “Search NCS (NCl)”, “Search RAL Classic”, “Search RAL Design”, “Search RAL Effect”, searches for the 5 closest colors in the specified color system color fan.
 
 <img src="https://b3d.interplanety.org/wp-content/upload_content/2018/04/01-400x212.png">
 
@@ -30,6 +34,9 @@ User Preferences - Add-ons - Install Add-on from File - select distributive arch
 2.79
 
 **Version history:**
+
+1.1
+- RAL (Classic, Design, Effect) fans added to search system
 
 1.0
 - This release

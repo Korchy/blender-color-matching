@@ -15,42 +15,33 @@ from .b3d_lib_int.rgb import RGB
 
 class ColorMatching:
 
-    __ncs_database = None
-    __ncs_database_file = os.path.join(os.path.dirname(__file__), 'ncs.json')
-
     __matches = []  # search results -> first element - rgb color
     __match_textures = []   # [[image1, texutre1], [image2, texture2], ...]
 
     @staticmethod
-    def search_nearest_ncs_by_rgb(source_rgb, limit):
-        # returns limit strings from ncs database file sorted by relevance to rgb
-        __class__.clear()
-        rgb = RGB.fromlist(source_rgb)
-        db = __class__.ncs_db()
-        rgb_vector = rgb.as_vector()
-        __class__.__matches = copy.deepcopy(sorted(db, key=lambda x: (rgb_vector - Vector((x[0][0], x[0][1], x[0][2]))).length)[:limit])
-        for ncs in __class__.__matches:
-            ncs.append(RGB.relevance(rgb, RGB.fromlist(ncs[0])))
-
-    @staticmethod
-    def ncs_db():
-        if not __class__.__ncs_database:
-            with open(__class__.__ncs_database_file) as data:
-                __class__.__ncs_database = json.load(data)
-        return __class__.__ncs_database
+    def search_by_rgb(context, db, rgb, limit):
+        __class__.clear(context)
+        if db == 'NCS':
+            __class__.__matches = NCS_DB.search(rgb, limit)
+        elif db == 'RAL_C':
+            __class__.__matches = RAL_C_DB.search(rgb, limit)
+        elif db == 'RAL_D':
+            __class__.__matches = RAL_D_DB.search(rgb, limit)
+        elif db == 'RAL_E':
+            __class__.__matches = RAL_E_DB.search(rgb, limit)
 
     @staticmethod
     def matches():
         return __class__.__matches
 
     @staticmethod
-    def matches_str():
+    def matches_str(context, db):
         matches_str = ''
         if __class__.__matches:
-            matches_str += '%\tRGB\tNCS\tHEX\tCMYK\n'
+            matches_str += '%\t\tRGB\t\t\t'+db+'\t\t\tHEX\t\tCMYK\n'
             for line in __class__.__matches:
                 matches_str += '{:<7.2%}\t{:03d}-{:03d}-{:03d}\t{:<15}\t'.format(line[2], int(line[0][0]), int(line[0][1]), int(line[0][2]), line[1][0])
-                matches_str += '{}\t{}'.format(line[1][2], '-'.join([a.zfill(3) for a in line[1][1].split('-')]))
+                matches_str += '{}\t{}'.format(line[1][3], '-'.join([a.zfill(3) for a in line[1][1].split('-')]))
                 matches_str += '\n'
         return matches_str
 
@@ -63,9 +54,10 @@ class ColorMatching:
         if __class__.__matches:
             for i, item in enumerate(__class__.__matches):
                 img = bpy.data.images.new('colormatch_image' + str(i), 255, 255)
-                img.generated_color[0] = item[0][0] / 255
-                img.generated_color[1] = item[0][1] / 255
-                img.generated_color[2] = item[0][2] / 255
+                matchcolor = RGB.fromlist(item[0]).as_linear()
+                img.generated_color[0] = matchcolor[0]
+                img.generated_color[1] = matchcolor[1]
+                img.generated_color[2] = matchcolor[2]
                 texture = bpy.data.textures.new('colormatch_texture' + str(i), type='IMAGE')
                 texture.image = img
                 __class__.__match_textures.append([img, texture])
@@ -79,9 +71,52 @@ class ColorMatching:
         __class__.__match_textures = []
 
     @staticmethod
-    def clear():
+    def clear(context):
         __class__.__matches = []
         __class__.clear_match_textures()
+
+
+class ColorDB:
+
+    #DB format: [[[RGB], [NCS/RAL, CMYK (C), CMYK (U), HTML]], [...], ...]
+    __database = None
+    _database_file = None
+
+    @classmethod
+    def db(cls):
+        if not cls.__database:
+            with open(cls._database_file) as data:
+                cls.__database = json.load(data)
+        return cls.__database
+
+    @classmethod
+    def search(cls, rgb, limit):
+        rgb_vector = rgb.as_vector()
+        db = cls.db()
+        rez = copy.deepcopy(sorted(db, key=lambda x: (rgb_vector - Vector((x[0][0], x[0][1], x[0][2]))).length)[:limit])
+        for result in rez:
+            result.append(RGB.relevance(rgb, RGB.fromlist(result[0])))
+        return rez
+
+
+class NCS_DB(ColorDB):
+
+    _database_file = os.path.join(os.path.dirname(__file__), 'ncs.json')
+
+
+class RAL_C_DB(ColorDB):
+
+    _database_file = os.path.join(os.path.dirname(__file__), 'ral_c.json')
+
+
+class RAL_D_DB(ColorDB):
+
+    _database_file = os.path.join(os.path.dirname(__file__), 'ral_d.json')
+
+
+class RAL_E_DB(ColorDB):
+
+    _database_file = os.path.join(os.path.dirname(__file__), 'ral_e.json')
 
 
 class ColorMatchingVars(bpy.types.PropertyGroup):
