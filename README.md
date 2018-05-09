@@ -22,7 +22,7 @@ User Preferences - Add-ons - Install Add-on from File - select distributive arch
 **Usage**
 
 - Set the required color in the “Color” color picker field.
-- “Search NCS (NCl)”, “Search RAL Classic”, “Search RAL Design”, “Search RAL Effect”, searches for the 5 closest colors in the specified color system color fan.
+- “Search NCS (NCl)”, “Search RAL Classic”, “Search RAL Design”, “Search RAL Effect”, searches for the 5 closest colors in the specified color fan.
 
 <img src="https://b3d.interplanety.org/wp-content/upload_content/2018/04/01-400x212.png">
 
@@ -36,7 +36,7 @@ User Preferences - Add-ons - Install Add-on from File - select distributive arch
 **Version history:**
 
 1.1
-- RAL (Classic, Design, Effect) fans added to search system
+- RAL (Classic, Design, Effect) fans added to the search system
 
 1.0
 - This release
