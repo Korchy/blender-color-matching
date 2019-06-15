@@ -4,6 +4,11 @@
 # GitHub
 #   https://github.com/Korchy/blender-color-matching
 
+from .addon import Addon
+from . import color_matching_panel
+from . import color_matching_ops
+from . import color_matching
+
 
 bl_info = {
     'name': 'Color matching',
@@ -17,21 +22,21 @@ bl_info = {
     'description': 'Search for some nearest alternative system colors by RGB value'
 }
 
-from . import color_matching_panel
-from . import color_matching_ops
-from . import color_matching
-
 
 def register():
-    color_matching.register()
-    color_matching_ops.register()
-    color_matching_panel.register()
+    if not Addon.dev_mode():
+        color_matching.register()
+        color_matching_ops.register()
+        color_matching_panel.register()
+    else:
+        print('It seems you are trying to use the dev version of the ' + bl_info['name'] + ' add-on. It may work not properly. Please download and use the release version!')
 
 
 def unregister():
-    color_matching_panel.unregister()
-    color_matching_ops.unregister()
-    color_matching.unregister()
+    if not Addon.dev_mode():
+        color_matching_panel.unregister()
+        color_matching_ops.unregister()
+        color_matching.unregister()
 
 
 if __name__ == '__main__':
