@@ -5,27 +5,28 @@
 #   https://github.com/Korchy/blender-color-matching
 
 
-import bpy
+from bpy.types import Panel
+from bpy.utils import register_class, unregister_class
 
 
-class ColorMatchPanel(bpy.types.Panel):
-    bl_idname = 'colormatch.panel'
+class COLORMATCH_PT_Panel(Panel):
+    bl_idname = 'COLORMATCH_PT_panel'
     bl_label = 'ColorMatch'
     bl_space_type = 'VIEW_3D'
-    bl_region_type = 'TOOLS'
+    bl_region_type = 'UI'
     bl_category = 'ColorMatch'
 
     def draw(self, context):
         self.layout.prop(context.window_manager.colormatching_vars, 'source_color')
-        self.layout.operator('colormatch.colormatch', text='Search NCS (NCl)').db = 'NCS'
-        self.layout.operator('colormatch.colormatch', text='Search RAL Classic').db = 'RAL_C'
-        self.layout.operator('colormatch.colormatch', text='Search RAL Design').db = 'RAL_D'
-        self.layout.operator('colormatch.colormatch', text='Search RAL Effect').db = 'RAL_E'
+        self.layout.operator('colormatch.color_match', text='Search NCS (NCl)').db = 'NCS'
+        self.layout.operator('colormatch.color_match', text='Search RAL Classic').db = 'RAL_C'
+        self.layout.operator('colormatch.color_match', text='Search RAL Design').db = 'RAL_D'
+        self.layout.operator('colormatch.color_match', text='Search RAL Effect').db = 'RAL_E'
 
 
 def register():
-    bpy.utils.register_class(ColorMatchPanel)
+    register_class(COLORMATCH_PT_Panel)
 
 
 def unregister():
-    bpy.utils.unregister_class(ColorMatchPanel)
+    unregister_class(COLORMATCH_PT_Panel)

@@ -6,6 +6,9 @@
 
 
 import bpy
+from bpy.props import FloatVectorProperty, PointerProperty, CollectionProperty
+from bpy.types import PropertyGroup, WindowManager
+from bpy.utils import register_class, unregister_class
 import os
 import json
 import copy
@@ -15,44 +18,44 @@ from .b3d_lib_int.rgb import RGB
 
 class ColorMatching:
 
-    __matches = []  # search results -> first element - rgb color
-    __match_textures = []   # [[image1, texutre1], [image2, texture2], ...]
+    _matches = []  # search results -> first element - rgb color
+    _match_textures = []   # [[image1, texutre1], [image2, texture2], ...]
 
-    @staticmethod
-    def search_by_rgb(context, db, rgb, limit):
-        __class__.clear(context)
+    @classmethod
+    def search_by_rgb(cls, context, db, rgb, limit):
+        cls.clear(context)
         if db == 'NCS':
-            __class__.__matches = NCS_DB.search(rgb, limit)
+            cls._matches = NCS_DB.search(rgb, limit)
         elif db == 'RAL_C':
-            __class__.__matches = RAL_C_DB.search(rgb, limit)
+            cls._matches = RAL_C_DB.search(rgb, limit)
         elif db == 'RAL_D':
-            __class__.__matches = RAL_D_DB.search(rgb, limit)
+            cls._matches = RAL_D_DB.search(rgb, limit)
         elif db == 'RAL_E':
-            __class__.__matches = RAL_E_DB.search(rgb, limit)
+            cls._matches = RAL_E_DB.search(rgb, limit)
 
-    @staticmethod
-    def matches():
-        return __class__.__matches
+    @classmethod
+    def matches(cls):
+        return cls._matches
 
-    @staticmethod
-    def matches_str(context, db):
+    @classmethod
+    def matches_str(cls, context, db):
         matches_str = ''
-        if __class__.__matches:
+        if cls._matches:
             matches_str += '%\t\tRGB\t\t\t'+db+'\t\t\tHEX\t\tCMYK\n'
-            for line in __class__.__matches:
+            for line in cls._matches:
                 matches_str += '{:<7.2%}\t{:03d}-{:03d}-{:03d}\t{:<15}\t'.format(line[2], int(line[0][0]), int(line[0][1]), int(line[0][2]), line[1][0])
                 matches_str += '{}\t{}'.format(line[1][3], '-'.join([a.zfill(3) for a in line[1][1].split('-')]))
                 matches_str += '\n'
         return matches_str
 
-    @staticmethod
-    def match_textures():
-        return __class__.__match_textures
+    @classmethod
+    def match_textures(cls):
+        return cls._match_textures
 
-    @staticmethod
-    def create_match_textures():
-        if __class__.__matches:
-            for i, item in enumerate(__class__.__matches):
+    @classmethod
+    def create_match_textures(cls):
+        if cls._matches:
+            for i, item in enumerate(cls._matches):
                 img = bpy.data.images.new('colormatch_image' + str(i), 255, 255)
                 matchcolor = RGB.fromlist(item[0]).as_linear()
                 img.generated_color[0] = matchcolor[0]
@@ -60,34 +63,34 @@ class ColorMatching:
                 img.generated_color[2] = matchcolor[2]
                 texture = bpy.data.textures.new('colormatch_texture' + str(i), type='IMAGE')
                 texture.image = img
-                __class__.__match_textures.append([img, texture])
+                cls._match_textures.append([img, texture])
 
-    @staticmethod
-    def clear_match_textures():
-        if __class__.__match_textures:
-            for item in __class__.__match_textures:
-                bpy.data.images.remove(item[0], do_unlink=True)
-                bpy.data.textures.remove(item[1], do_unlink=True)
-        __class__.__match_textures = []
+    @classmethod
+    def clear_match_textures(cls):
+        if cls._match_textures:
+            for item in cls._match_textures:
+                bpy.data.images.remove(image=item[0], do_unlink=True)
+                bpy.data.textures.remove(image=item[1], do_unlink=True)
+        cls._match_textures = []
 
-    @staticmethod
-    def clear(context):
-        __class__.__matches = []
-        __class__.clear_match_textures()
+    @classmethod
+    def clear(cls, context):
+        cls._matches = []
+        cls.clear_match_textures()
 
 
 class ColorDB:
 
     #DB format: [[[RGB], [NCS/RAL, CMYK (C), CMYK (U), HTML]], [...], ...]
-    __database = None
+    _database = None
     _database_file = None
 
     @classmethod
     def db(cls):
-        if not cls.__database:
+        if not cls._database:
             with open(cls._database_file) as data:
-                cls.__database = json.load(data)
-        return cls.__database
+                cls._database = json.load(data)
+        return cls._database
 
     @classmethod
     def search(cls, rgb, limit):
@@ -119,8 +122,9 @@ class RAL_E_DB(ColorDB):
     _database_file = os.path.join(os.path.dirname(__file__), 'ral_e.json')
 
 
-class ColorMatchingVars(bpy.types.PropertyGroup):
-    source_color = bpy.props.FloatVectorProperty(
+class ColorMatchingVars(PropertyGroup):
+
+    source_color: FloatVectorProperty(
         name='Color',
         subtype='COLOR',
         size=4,
@@ -130,12 +134,9 @@ class ColorMatchingVars(bpy.types.PropertyGroup):
     )
 
 
-class ColorMatchingStatic:
-    matching_count = 5
+class DestColorItem(PropertyGroup):
 
-
-class DestColorItem(bpy.types.PropertyGroup):
-    dest_color = bpy.props.FloatVectorProperty(
+    dest_color: FloatVectorProperty(
          name='Color',
          subtype='COLOR',
          size=4,
@@ -146,14 +147,14 @@ class DestColorItem(bpy.types.PropertyGroup):
 
 
 def register():
-    bpy.utils.register_class(ColorMatchingVars)
-    bpy.utils.register_class(DestColorItem)
-    bpy.types.WindowManager.colormatching_vars = bpy.props.PointerProperty(type=ColorMatchingVars)
-    bpy.types.WindowManager.colormatching_colors = bpy.props.CollectionProperty(type=DestColorItem)
+    register_class(ColorMatchingVars)
+    register_class(DestColorItem)
+    WindowManager.colormatching_vars = PointerProperty(type=ColorMatchingVars)
+    WindowManager.colormatching_colors = CollectionProperty(type=DestColorItem)
 
 
 def unregister():
-    del bpy.types.WindowManager.colormatching_colors
-    del bpy.types.WindowManager.colormatching_vars
-    bpy.utils.unregister_class(DestColorItem)
-    bpy.utils.unregister_class(ColorMatchingVars)
+    del WindowManager.colormatching_colors
+    del WindowManager.colormatching_vars
+    unregister_class(DestColorItem)
+    unregister_class(ColorMatchingVars)

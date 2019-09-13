@@ -9,7 +9,9 @@ Author: Nikita Akimov interplanety@interplanety.org
 
 **Current version**
 
-1.1
+1.2 (for Blender 2.80)
+
+Version 1.1. for Blender 2.7x is frozen. You can get the last release <a href = "https://github.com/Korchy/blender-color-matching/releases/tag/v.1.1">here</a>.
 
 **Installation**
 
@@ -31,9 +33,12 @@ User Preferences - Add-ons - Install Add-on from File - select distributive arch
 
 **Tested with Blender versions:**
 
-2.79
+2.80
 
 **Version history:**
+
+1.2
+- Ported to Blender 2.80. Version for 2.7x frozen.
 
 1.1
 - RAL (Classic, Design, Effect) fans added to the search system
