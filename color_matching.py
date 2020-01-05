@@ -32,6 +32,8 @@ class ColorMatching:
             cls._matches = RAL_D_DB.search(rgb, limit)
         elif db == 'RAL_E':
             cls._matches = RAL_E_DB.search(rgb, limit)
+        elif db == 'PANTONE':
+            cls._matches = PANTONE_DB.search(rgb, limit)
 
     @classmethod
     def matches(cls):
@@ -81,7 +83,7 @@ class ColorMatching:
 
 class ColorDB:
 
-    #DB format: [[[RGB], [NCS/RAL, CMYK (C), CMYK (U), HTML]], [...], ...]
+    # DB format: [[[RGB], [NCS/RAL/PANTONR, CMYK (C), CMYK (U), HTML]], [...], ...]
     _database = None
     _database_file = None
 
@@ -120,6 +122,11 @@ class RAL_D_DB(ColorDB):
 class RAL_E_DB(ColorDB):
 
     _database_file = os.path.join(os.path.dirname(__file__), 'ral_e.json')
+
+
+class PANTONE_DB(ColorDB):
+
+    _database_file = os.path.join(os.path.dirname(__file__), 'pantone.json')
 
 
 class ColorMatchingVars(PropertyGroup):

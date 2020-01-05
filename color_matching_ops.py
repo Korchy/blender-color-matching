@@ -100,6 +100,7 @@ class COLORMATCH_OT_color_match(Operator):
             col.prop(context.window_manager.colormatching_colors[i], 'dest_color', text='')
             col.label(text=match[1][0])
             col.label(text='CMYK ' + match[1][1])
+            col.label(text='HEX ' + match[1][3])
             col.operator('colormatch.add_node').add_node_id = i
 
     def check(self, context):

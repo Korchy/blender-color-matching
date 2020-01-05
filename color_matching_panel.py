@@ -22,6 +22,7 @@ class COLORMATCH_PT_Panel(Panel):
         self.layout.operator('colormatch.color_match', text='Search RAL Classic').db = 'RAL_C'
         self.layout.operator('colormatch.color_match', text='Search RAL Design').db = 'RAL_D'
         self.layout.operator('colormatch.color_match', text='Search RAL Effect').db = 'RAL_E'
+        self.layout.operator('colormatch.color_match', text='Search PANTONE (PMS)').db = 'PANTONE'
 
 
 def register():
