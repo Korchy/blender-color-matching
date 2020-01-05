@@ -38,7 +38,7 @@ User Preferences - Add-ons - Install Add-on from File - select distributive arch
 Version history
 -
 1.3
-- Ported to Blender 2.80. Version for 2.7x frozen.
+- Added Pantone (PMS) color fan
 
 1.2
 - Ported to Blender 2.80. Version for 2.7x frozen.
